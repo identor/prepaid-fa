@@ -16,14 +16,8 @@ export function routerConfig($stateProvider, $urlRouterProvider) {
       controller: 'LoginController',
       controllerAs: 'vm'
     })
-    .state('home', {
-      url: '/',
-      templateUrl: 'app/main/main.html',
-      controller: 'MainController',
-      controllerAs: 'vm'
-    })
   ;
 
-  $urlRouterProvider.otherwise('/');
+  $urlRouterProvider.otherwise('/login');
 }
 

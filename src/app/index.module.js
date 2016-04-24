@@ -9,6 +9,7 @@ import { routerConfig } from './index.route';
 import { runBlock } from './index.run';
 import { MainController } from './main/main.controller';
 import { LoginController } from './components/login/login.controller';
+import { UserService } from './components/login/user.service.js';
 
 angular.module('prepaidFa', [
     'ngAnimate',
@@ -29,5 +30,6 @@ angular.module('prepaidFa', [
   .run(runBlock)
   .controller('MainController', MainController)
   .controller('LoginController', LoginController)
+  .service('$pfaUser', UserService)
 ;
 

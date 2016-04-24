@@ -1,6 +1,6 @@
-<div>
+<div layout="row" layout-fill layout-align="center center"  ng-hide="vm.isLoading">
   <md-card>
-    <form>
+    <form ng-submit="vm.login()">
       <md-toolbar layout="row" layout-align="start center">
         <div style="padding-left: 15px">
           <h3 class="md-title">Login</h3>
@@ -10,18 +10,22 @@
       </md-toolbar>
       <section layout="column">
         <md-input-container>
-          <label>Username</label>
-          <input type="text" ng-model="vm.username">
+          <label>Email</label>
+          <input type="email" ng-model="vm.email" required>
         </md-input-container>
         <md-input-container>
           <label>Password</label>
-          <input type="password" ng-model="vm.password">
+          <input type="password" ng-model="vm.password" required>
         </md-input-container>
       </section>
       <div layout="row" layout-sm="column" layout-align="center center">
-        <md-button class="md-raised md-primary" ui-sref="home">Sign-in</md-button>
+        <md-button type="submit" class="md-raised md-primary">Submit</md-button>
       </div>
     </form>
   </md-card>
+</div>
+<div layout="column" layout-fill layout-align="center center" ng-show="vm.isLoading">
+  <md-progress-circular md-mode="indeterminate" md-diameter="130"></md-progress-circular>
+  <p>Loading....</p>
 </div>
 
