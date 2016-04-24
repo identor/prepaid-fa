@@ -1,0 +1,9 @@
+{
+  "firebase": "prepaid-fa",
+  "public": "dist",
+  "ignore": [
+    "firebase.json",
+    "**/.*",
+    "**/node_modules/**"
+  ]
+}

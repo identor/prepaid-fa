@@ -1,0 +1,27 @@
+<div>
+  <md-card>
+    <form>
+      <md-toolbar layout="row" layout-align="start center">
+        <div style="padding-left: 15px">
+          <h3 class="md-title">Login</h3>
+        </div>
+        <span flex></span>
+        <md-button class="md-icon-button" href="https://synergbpo.com"><md-icon>close</md-icon></md-button>
+      </md-toolbar>
+      <section layout="column">
+        <md-input-container>
+          <label>Username</label>
+          <input type="text" ng-model="vm.username">
+        </md-input-container>
+        <md-input-container>
+          <label>Password</label>
+          <input type="password" ng-model="vm.password">
+        </md-input-container>
+      </section>
+      <div layout="row" layout-sm="column" layout-align="center center">
+        <md-button class="md-raised md-primary" ui-sref="home">Sign-in</md-button>
+      </div>
+    </form>
+  </md-card>
+</div>
+

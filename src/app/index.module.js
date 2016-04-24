@@ -1,0 +1,33 @@
+'use strict';
+
+// Angular Modules
+import './utils';
+
+import * as moment from 'moment';
+import { config } from './index.config';
+import { routerConfig } from './index.route';
+import { runBlock } from './index.run';
+import { MainController } from './main/main.controller';
+import { LoginController } from './components/login/login.controller';
+
+angular.module('prepaidFa', [
+    'ngAnimate',
+    'ngCookies',
+    'ngSanitize',
+    'ngMessages',
+    'ngAria',
+    'ngResource',
+    'ui.router',
+    'ngMaterial',
+    'firebase',
+    'ngmUtils'
+  ])
+  .constant('firebaseUrl', 'https://prepaid-fa.firebaseio.com')
+  .constant('moment', moment)
+  .config(config)
+  .config(routerConfig)
+  .run(runBlock)
+  .controller('MainController', MainController)
+  .controller('LoginController', LoginController)
+;
+
