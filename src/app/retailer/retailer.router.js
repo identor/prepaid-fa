@@ -39,10 +39,10 @@ export function routerConfig($stateProvider) {
               <strong flex="33">Amount</strong>
               <strong flex="33">Date Purchased</strong>
             </div>
-            <div ng-repeat="i in ['a', 'b', 'c']" layout="row">
-              <span flex="33">+63 909 999 1234</span>
-              <span flex="33">Php. 500.00</span>
-              <span flex="33">09/12/2016 16:44:22</span>
+            <div ng-repeat="purchase in retailer.purchases" layout="row">
+              <span flex="33">{{ purchase.number }}</span>
+              <span flex="33">{{ purchase.amount }}</span>
+              <span flex="33">{{ purchase.dateCreated | date:'yyyy-MM-dd HH:mm:ss' }}</span>
             </div>
           </md-content>
         </div>
@@ -50,7 +50,12 @@ export function routerConfig($stateProvider) {
           <md-icon>add</md-icon>
         </md-button>
       `,
-      controller: function ($ngmDashboard, $ngmUtilsDialog) {
+      controller: function ($ngmDashboard, $ngmUtilsDialog, Firebase, $firebaseArray, firebaseUrl) {
+        'ngInject';
+
+        this.ref = new Firebase(firebaseUrl);
+        this.purchases = $firebaseArray(this.ref.child('purchases'));
+
         this.$ngmDashboard = $ngmDashboard;
 
         this.addPurchase = (evt) => {
@@ -60,13 +65,16 @@ export function routerConfig($stateProvider) {
             template: `
               <md-input-container>
                 <label>Mobile no.</label>
-                <input type="number" required>
+                <input ng-model="vm.obj.number" type="number" required>
               </md-input-container>
               <md-input-container>
                 <label>Amount</label>
-                <input type="number" required>
+                <input ng-model="vm.obj.amount" type="number" required>
               </md-input-container>
             `
+          }).then(purchase => {
+            purchase.dateCreated = Firebase.ServerValue.TIMESTAMP;
+            this.purchases.$add(purchase);
           });
         }
       },

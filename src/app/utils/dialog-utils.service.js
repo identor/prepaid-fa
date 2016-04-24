@@ -73,7 +73,8 @@ export class DialogUtilsService {
       targetEvent: config.ev || null,
       locals: { $dialogData: config.data },
       clickOutsideToClose: true
-    }).then(() => {
+    }).then((data) => {
+      return data;
     }, error => {
       $log.debug(error);
     });
