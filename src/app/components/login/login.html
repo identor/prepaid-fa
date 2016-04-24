@@ -1,6 +1,6 @@
 <div layout="row" layout-fill layout-align="center center"  ng-hide="vm.isLoading">
   <md-card>
-    <form ng-submit="vm.login()">
+    <form ng-submit="vm.login($event)">
       <md-toolbar layout="row" layout-align="start center">
         <div style="padding-left: 15px">
           <h3 class="md-title">Login</h3>

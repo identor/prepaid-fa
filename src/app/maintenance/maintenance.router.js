@@ -7,9 +7,10 @@ export function routerConfig($stateProvider) {
       template: `
         <md-sidenav md-theme="maintenance" ng-hide="vm.$ngmDashboard.isHideNav" class="md-sidenav-left md-whiteframe-z2" md-component-id="left" md-is-locked-open="$mdMedia('gt-sm')" layout="column">
           <md-toolbar layout="row" layout-align="center center">
-            <md-button ui-sref="home">
-              <span>Maintenance</span>
-            </md-button>
+            <img alt="{{ maintenance.user.email }}" ng-src="{{ maintenance.user.imageUrl }}">
+            <div class="md-toolbar-tools">
+              <h2>{{ maintenance.user.email.split('@')[0].substring(0, 20) }}</h2>
+            </div>
             <span flex></span>
             <md-button class="md-icon-button" ng-click="maintenance.$pfaUser.logout()">
               <md-icon>exit_to_app</md-icon>
@@ -30,10 +31,10 @@ export function routerConfig($stateProvider) {
         <div md-theme="maintenance" flex layout="column" tabIndex="-1" role="main" class="md-whiteframe-z2">
           <md-toolbar ng-hide="vm.$ngmDashboard.isHideToolbar" layout="row" class="md-whiteframe-z1">
             <div class="md-toolbar-tools">
-              <md-button id="main" class="menu" hide-gt-sm ng-click="maintenance.$ngmDashboard.toggleSidenav()" aria-label="Show User List">
+              <md-button id="main" class="menu" hide-gt-sm ng-click="admin.$ngmDashboard.toggleSidenav()" aria-label="Show Nav">
                 <md-icon>menu</md-icon>
               </md-button>
-              <h2 class="md-title">irvin@outlook.ph</h2>
+              <span>Maintenance</span>
             </div>
           </md-toolbar>
           <md-content layout-padding>
@@ -54,12 +55,20 @@ export function routerConfig($stateProvider) {
           <md-icon>add</md-icon>
         </md-button>
       `,
-      controller: function ($ngmDashboard, $ngmUtilsDialog, Firebase, firebaseUrl, $firebaseArray, $firebaseAuth, $mdDialog, $pfaUser) {
+      controller: function ($ngmDashboard, $ngmUtilsDialog, Firebase, firebaseUrl, $firebaseArray, $firebaseAuth, $mdDialog, $pfaUser, $rootScope, $sessionStorage, $state) {
         'ngInject';
 
         this.ref = new Firebase(firebaseUrl);
         this.users = $firebaseArray(this.ref.child('users'));
         this.auth = $firebaseAuth(this.ref);
+
+        $rootScope.user = $sessionStorage.user;
+        this.user = $rootScope.user;
+
+        if (!this.user || this.user.type !== 'maintenance') {
+          $state.go('login');
+          $state.go(this.user.type);
+        }
 
         this.$pfaUser = $pfaUser;
 

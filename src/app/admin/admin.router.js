@@ -7,9 +7,10 @@ export function routerConfig($stateProvider) {
       template: `
         <md-sidenav md-theme="admin" class="md-sidenav-left md-whiteframe-z2" md-component-id="left" md-is-locked-open="$mdMedia('gt-sm')" layout="column">
           <md-toolbar layout="row" layout-align="center center">
-            <md-button ui-sref="home">
-              <span>Admin</span>
-            </md-button>
+            <img alt="{{ admin.user.email }}" ng-src="{{ admin.user.imageUrl }}">
+            <div class="md-toolbar-tools">
+              <h2>{{ admin.user.email.split('@')[0].substring(0, 20) }}</h2>
+            </div>
             <span flex></span>
             <md-button class="md-icon-button" ng-click="admin.$pfaUser.logout()">
               <md-icon>exit_to_app</md-icon>
@@ -33,7 +34,7 @@ export function routerConfig($stateProvider) {
               <md-button id="main" class="menu" hide-gt-sm ng-click="admin.$ngmDashboard.toggleSidenav()" aria-label="Show Nav">
                 <md-icon>menu</md-icon>
               </md-button>
-              <h2 class="md-title">irvin@outlook.ph</h2>
+              <span>Admin</span>
             </div>
           </md-toolbar>
           <md-content layout-padding>
@@ -62,12 +63,42 @@ export function routerConfig($stateProvider) {
           <md-icon>add</md-icon>
         </md-button>
       `,
-      controller: function ($ngmDashboard, $log, Firebase, $firebaseArray, firebaseUrl, $ngmUtilsDialog, $mdDialog, $pfaUser) {
+      controller: function ($ngmDashboard, $log, Firebase, $firebaseArray, firebaseUrl, $ngmUtilsDialog, $mdDialog, $pfaUser, $rootScope, $sessionStorage, $state) {
         'ngInject';
+
+        $rootScope.user = $sessionStorage.user;
+        this.user = $rootScope.user;
+
+        if (!this.user || this.user.type !== 'admin') {
+          $state.go('login');
+          $state.go(this.user.type);
+        }
 
         this.$ngmDashboard = $ngmDashboard;
         this.ref = new Firebase(firebaseUrl);
         this.accounts = $firebaseArray(this.ref.child('accounts'));
+        this.purchases = $firebaseArray(this.ref.child('purchases'));
+
+        this.accounts.$loaded()
+          .then(() => {
+            this.purchases.$loaded()
+              .then(() => {
+                this.accounts.forEach((account, index) => {
+                  let purchaseInstances = this.purchases.filter(purchase => {
+                    return purchase.number === account.mobile;
+                  });
+
+                  let totalBal = purchaseInstances.map(purchase  => {
+                    return purchase.amount;
+                  }).reduce((prev, curr) => {
+                    return prev + curr;
+                  }, 0);
+
+                  this.accounts[index].balance = totalBal;
+                  this.accounts.$save(index);
+                });
+              });
+          });
 
         this.$pfaUser = $pfaUser;
 
@@ -77,7 +108,7 @@ export function routerConfig($stateProvider) {
             template: `
               <md-input-container>
                 <label>Mobile Number</label>
-                <input ng-model="vm.obj.mobile" required>
+                <input type="number" ng-model="vm.obj.mobile" required>
               </md-input-container>
               <md-input-container>
                 <label>Name</label>

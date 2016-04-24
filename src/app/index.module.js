@@ -21,7 +21,8 @@ angular.module('prepaidFa', [
     'ui.router',
     'ngMaterial',
     'firebase',
-    'ngmUtils'
+    'ngmUtils',
+    'ngStorage'
   ])
   .constant('firebaseUrl', 'https://prepaid-fa.firebaseio.com')
   .constant('moment', moment)

@@ -1,5 +1,5 @@
 export class UserService {
-  constructor(Firebase, $firebaseArray, $firebaseAuth, $q, firebaseUrl, $state, $rootScope) {
+  constructor(Firebase, $firebaseArray, $firebaseAuth, $q, firebaseUrl, $state, $rootScope, $sessionStorage) {
     'ngInject';
 
     this.ref = new Firebase(firebaseUrl);
@@ -8,6 +8,7 @@ export class UserService {
     this.$q = $q;
     this.$state = $state;
     this.$rootScope = $rootScope;
+    this.$sessionStorage = $sessionStorage;
   }
 
   getUser() {
@@ -61,7 +62,7 @@ export class UserService {
 
   logout() {
     this.auth.$unauth();
-    this.$rootScope.user = null;
+    this.$sessionStorage.user = this.$rootScope.user = null;
     this.$state.go('login');
   }
 }
