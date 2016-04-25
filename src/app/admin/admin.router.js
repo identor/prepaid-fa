@@ -66,18 +66,23 @@ export function routerConfig($stateProvider) {
       controller: function ($ngmDashboard, $log, Firebase, $firebaseArray, firebaseUrl, $ngmUtilsDialog, $mdDialog, $pfaUser, $rootScope, $sessionStorage, $state) {
         'ngInject';
 
-        $rootScope.user = $sessionStorage.user;
-        this.user = $rootScope.user;
+        this.user = $rootScope.user = $sessionStorage.user;
 
         if (!this.user || this.user.type !== 'admin') {
           $state.go('login');
           $state.go(this.user.type);
         }
 
-        this.$ngmDashboard = $ngmDashboard;
         this.ref = new Firebase(firebaseUrl);
         this.accounts = $firebaseArray(this.ref.child('accounts'));
         this.purchases = $firebaseArray(this.ref.child('purchases'));
+
+        this.onLogout = $rootScope.$on('logout', () => {
+          this.accounts.$destroy();
+          this.purchases.$destroy();
+        });
+
+        this.$ngmDashboard = $ngmDashboard;
 
         this.accounts.$loaded()
           .then(() => {

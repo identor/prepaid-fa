@@ -58,17 +58,20 @@ export function routerConfig($stateProvider) {
       controller: function ($ngmDashboard, $ngmUtilsDialog, Firebase, firebaseUrl, $firebaseArray, $firebaseAuth, $mdDialog, $pfaUser, $rootScope, $sessionStorage, $state) {
         'ngInject';
 
-        this.ref = new Firebase(firebaseUrl);
-        this.users = $firebaseArray(this.ref.child('users'));
-        this.auth = $firebaseAuth(this.ref);
-
-        $rootScope.user = $sessionStorage.user;
-        this.user = $rootScope.user;
+        this.user = $rootScope.user = $sessionStorage.user;
 
         if (!this.user || this.user.type !== 'maintenance') {
           $state.go('login');
           $state.go(this.user.type);
         }
+
+        this.ref = new Firebase(firebaseUrl);
+        this.users = $firebaseArray(this.ref.child('users'));
+        this.auth = $firebaseAuth(this.ref);
+
+        this.onLogout = $rootScope.$on('logout', () => {
+          this.users.$destroy();
+        });
 
         this.$pfaUser = $pfaUser;
 
@@ -76,11 +79,11 @@ export function routerConfig($stateProvider) {
 
         this.deleteUser = (evt, userIndex) => {
           let confirm = $mdDialog.confirm()
-                          .title('Delete user')
-                          .textContent('Are you sure you want to delete this user?')
-                          .targetEvent(evt)
-                          .ok('Ok')
-                          .cancel('Cancel');
+            .title('Delete user')
+            .textContent('Are you sure you want to delete this user?')
+            .targetEvent(evt)
+            .ok('Ok')
+            .cancel('Cancel');
           $mdDialog.show(confirm).then(() => {
             this.users.$remove(userIndex);
           });

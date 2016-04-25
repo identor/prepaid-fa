@@ -57,8 +57,7 @@ export function routerConfig($stateProvider) {
       controller: function ($ngmDashboard, $ngmUtilsDialog, Firebase, $firebaseArray, firebaseUrl, $pfaUser, $rootScope, $sessionStorage, $state) {
         'ngInject';
 
-        $rootScope.user = $sessionStorage.user;
-        this.user = $rootScope.user;
+        this.user = $rootScope.user = $sessionStorage.user;
 
         if (!this.user || this.user.type !== 'retailer') {
           $state.go('login');
@@ -66,7 +65,15 @@ export function routerConfig($stateProvider) {
         }
 
         this.ref = new Firebase(firebaseUrl);
-        this.purchases = $firebaseArray(this.ref.child('purchases'));
+        let query = this.ref.child('purchases')
+          .orderByChild('retailerUid')
+          .startAt(this.user.uid)
+          .endAt(this.user.uid)
+        this.purchases = $firebaseArray(query);
+
+        this.onLogout = $rootScope.$on('logout', () => {
+          this.purchases.$destroy();
+        });
 
         this.$pfaUser = $pfaUser;
 
