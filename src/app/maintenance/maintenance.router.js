@@ -31,7 +31,7 @@ export function routerConfig($stateProvider) {
         <div md-theme="maintenance" flex layout="column" tabIndex="-1" role="main" class="md-whiteframe-z2">
           <md-toolbar ng-hide="vm.$ngmDashboard.isHideToolbar" layout="row" class="md-whiteframe-z1">
             <div class="md-toolbar-tools">
-              <md-button id="main" class="menu" hide-gt-sm ng-click="admin.$ngmDashboard.toggleSidenav()" aria-label="Show Nav">
+              <md-button id="main" class="menu" hide-gt-sm ng-click="maintenance.$ngmDashboard.toggleSidenav()" aria-label="Show Nav">
                 <md-icon>menu</md-icon>
               </md-button>
               <span>Maintenance</span>

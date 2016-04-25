@@ -30,14 +30,11 @@ export function routerConfig($stateProvider) {
         </md-sidenav>
         <div flex md-theme="retailer" layout="column" tabIndex="-1" role="main" class="md-whiteframe-z2">
           <md-toolbar ng-hide="vm.$ngmDashboard.isHideToolbar" layout="row" class="md-whiteframe-z1">
-            <md-button id="main" class="menu" hide-gt-sm ng-click="retailer.$ngmDashboard.toggleSidenav()" aria-label="Show User List">
-              <md-icon>menu</md-icon>
-            </md-button>
             <div class="md-toolbar-tools">
-              <md-button id="main" class="menu" hide-gt-sm ng-click="admin.$ngmDashboard.toggleSidenav()" aria-label="Show Nav">
+              <md-button id="main" class="menu" hide-gt-sm ng-click="retailer.$ngmDashboard.toggleSidenav()" aria-label="Show User List">
                 <md-icon>menu</md-icon>
               </md-button>
-              <span>Retailer</span>
+              <h2>Retailer</h2>
             </div>
           </md-toolbar>
           <md-content layout-padding layout="column">
